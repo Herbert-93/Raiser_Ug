@@ -10,6 +10,8 @@ import ProtectedRoute from './components/Auth/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ResetPassword from './pages/Auth/ResetPassword';
 import Campaigns from './pages/Campaigns/Campaigns';
 import CampaignDetails from './pages/Campaigns/CampaignDetails';
 import CreateCampaign from './pages/Campaigns/CreateCampaign';
@@ -21,7 +23,11 @@ import Contact from './pages/Contact';
 
 import { AuthProvider } from './context/AuthContext';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, refetchOnWindowFocus: false },
+  },
+});
 
 function App() {
   return (
@@ -31,14 +37,18 @@ function App() {
           <Router>
             <Layout>
               <Routes>
+                {/* Public routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/campaigns" element={<Campaigns />} />
                 <Route path="/campaign/:id" element={<CampaignDetails />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                
+
+                {/* Protected routes */}
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
                     <Dashboard />
@@ -62,14 +72,22 @@ function App() {
               </Routes>
             </Layout>
           </Router>
-          <Toaster 
+
+          <Toaster
             position="top-right"
             toastOptions={{
               duration: 4000,
               style: {
-                background: '#363636',
-                color: '#fff',
+                background: '#1F2937',
+                color: '#F9FAFB',
+                borderRadius: '12px',
+                fontSize: '14px',
+                fontWeight: '500',
+                padding: '12px 16px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
               },
+              success: { iconTheme: { primary: '#10B981', secondary: '#F9FAFB' } },
+              error: { iconTheme: { primary: '#EF4444', secondary: '#F9FAFB' } },
             }}
           />
         </AuthProvider>
